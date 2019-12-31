@@ -16,4 +16,14 @@ The project contains some cert files in the `certs` directory.
 You can generate additional cert files by following these [instructions](https://www.akadia.com/services/ssh_test_certificate.html).
 
 ## Getting started
-Make a copy of `.env.example` and name it `.env`. You can edit the values in it to suit your needs.
+1. Make a copy of `.env.example` and name it `.env`. You can edit the values to suit your needs.
+2. Install the packages:
+```
+npm install
+```
+
+## Run the server
+To start the proxy server, run:
+```
+npm start
+```
