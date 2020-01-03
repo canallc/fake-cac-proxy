@@ -12,10 +12,24 @@ if (!process.env.targetHost) { throw new Error('You must set an environment vari
 if (!process.env.targetPort) { throw new Error('You must set an environment variable for target port.'); }
 if (!process.env.port) { throw new Error('You must set an environment variable for port.'); }
 
+var options = {
+  target: {
+    host: process.env.targetHost,
+    port: process.env.targetPort
+  }
+};
+
+if (process.env.secure == 'true') {
+  options.ssl = {
+    key: fs.readFileSync(path.join(__dirname, 'localhost-key.pem'), 'utf8'),
+    cert: fs.readFileSync(path.join(__dirname, 'localhost-crt.pem'), 'utf8')
+  }
+}
+
 //
 // Create a proxy server with custom application logic
 //
-var proxy = httpProxy.createProxyServer({});
+var proxy = httpProxy.createProxyServer(options);
 
 var certMap = {};
 
@@ -41,23 +55,9 @@ proxy.on('proxyReq', function(proxyReq, req, res, options) {
 
   const pemString = certMap[certName];
 
-  proxyReq.setHeader('HTTP_CLIENT_FULL', pemString);
+  proxyReq.setHeader(process.env.requestHeaderName, pemString);
 });
 
-var options = {
-  target: {
-    host: process.env.targetHost,
-    port: process.env.targetPort
-  }
-};
-
-if (process.env.secure == 'true') {
-  options.ssl = {
-    key: fs.readFileSync(path.join(__dirname, 'localhost-key.pem'), 'utf8'),
-    cert: fs.readFileSync(path.join(__dirname, 'localhost-crt.pem'), 'utf8')
-  }
-}
-
-httpProxy.createServer(options).listen(process.env.port, () => {
+proxy.listen(process.env.port, () => {
   console.log("listening on port " + process.env.port);
 });
