@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "follow-redirects": "^1.14.7",
+    "follow-redirects": "^1.14.8",
     "http-proxy": "^1.18.1"
   }
 }
